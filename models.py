@@ -1,44 +1,21 @@
+from flask import Flask, jsonify
+from models import User, Note, Drawing  # Assuming models is the name of your file containing the above classes
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
-db = SQLAlchemy()
+app = Flask(__name__)
+db = SQLAlchemy(app)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password_hash = db.Column(db.String(200), nullable=False)
-    notes = db.relationship('Note', backref='author', lazy=True)
-    drawings = db.relationship('Drawing', backref='creator', lazy=True)
-
-    def __repr__(self):
-        return f'<User {self.username}>'
-
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<Note {self.title}>'
-
-class Drawing(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    drawing_data = db.Column(db.Text, nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    user a_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<Drawing {self.name}>'
-
-class Erase(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    drawing_id = db.Column(db.Integer, db.ForeignKey('drawing.id'), nullable=False)
-    erase_data = db.Column(db.Text, nullable=False)
-    date_erased = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f'<Erase {self.id}>'
+@app.route('/users/<int:user_id>')
+def get_user(user_id):
+    # Using joinedload to reduce SQL queries when accessing notes and drawings.
+    user = User.query.options(db.joinedload(User.notes), db.joinedload(User.drawings)).get(user_id)
+    if user is not None:
+        user_data = {
+            'username': user.username,
+            'email': user.email,
+            'notes': [{'title': note.title, 'content': note.content} for note in user.notes],
+            'draws': [{'name': drawing.name, 'data': drawing.drawing_data} for drawing in user.drawings]
+        }
+        return jsonify(user_data)
+    else:
+        return "User not found", 404
