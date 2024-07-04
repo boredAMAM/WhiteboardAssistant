@@ -8,32 +8,32 @@ if os.path.exists('.env'):
     load_dotenv()
 
 @app.route('/')
-def home():
+def display_homepage():
     return render_template('index.html')
 
 @app.route('/draw', methods=['POST'])
-def draw():
+def save_drawing():
     drawing_data = request.json
-    return jsonify({'status': 'success', 'message': 'Drawing saved.'})
+    return jsonify({'status': 'success', 'message': 'Drawing saved successfully.'})
 
 @app.route('/erase', methods=['POST'])
-def erase():
-    erase_data = request.json
-    return jsonify({'status': 'success', 'message': 'Part of the board erased.'})
+def erase_drawing_part():
+    erased_data = request.json
+    return jsonify({'status': 'success', 'message': 'Selected drawing part erased successfully.'})
 
 @app.route('/notes', methods=['GET', 'POST', 'DELETE'])
-def manage_notes():
+def notes_management():
     if request.method == 'GET':
         notes = [{'id': 1, 'content': 'Sample note'}]
         return jsonify(notes)
     
     elif request.method == 'POST':
-        note_data = request.json
-        return jsonify({'status': 'success', 'message': 'Note saved.'})
+        new_note_data = request.json
+        return jsonify({'status': 'success', 'message': 'Note added successfully.'})
     
     elif request.method == 'DELETE':
-        note_id = request.json.get('id')
-        return jsonify({'astatus': 'success', 'message': 'Note deleted.'})
+        deleted_note_id = request.json.get('id')
+        return jsonify({'status': 'success', 'message': 'Note deleted successfully.'})
 
 if __name__ == '__main__':
     app.run(debug=True)
