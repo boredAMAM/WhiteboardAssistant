@@ -20,6 +20,8 @@
         <section id="drawing">
             <h2>Drawing</h2>
             <p>Utilize our intuitive drawing tools to sketch diagrams, jot down ideas, and illustrate concepts on a virtual whiteboard. Adjust brush sizes and colors to make your ideas vivid and clear.</p>
+            <!-- New Button for creating a new drawing -->
+            <button id="newDrawing">Start New Drawing</button>
         </section>
         <section id="erasing">
             <h2>Erasing</h2>
@@ -37,3 +39,9 @@
 </body>
 
 </html>
+```
+```javascript
+document.getElementById("newDrawing").addEventListener("click", function() {
+    // Clear the drawing area or implement functionality as needed
+    alert('Start a new drawing!'); // This is a placeholder. Replace with actual functionality.
+});
