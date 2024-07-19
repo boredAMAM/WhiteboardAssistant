@@ -5,21 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whiteboard Assistant</title>
     <style>
-        #drawingCanvas {
+        #drawingCanvas, #authorSection {
             border: 2px solid #000;
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
         }
+        #authorSection {
+            display: none;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
     </style>
 </head>
 <body>
+
     <canvas id="drawingCanvas" width="800" height="600"></canvas>
+    
+    <div id="authorSection">
+        <h2>Author Information</h2>
+        <p>Name: John Doe</p>
+        <p>Contact: johndoe@example.com</p>
+        <p>About: This is a simple whiteboard assistant project created by John Doe.</p>
+    </div>
+
+    <button id="toggleViewBtn">Author Page</button>
+
     <script>
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
+        const authorSection = document.getElementById('authorService');
+        const toggleViewBtn = document.getElementById('toggleViewBtn');
+        
         let isDrawing = false;
+        let isWhiteboardVisible = true; 
+
         function startDrawing(e) {
             isDrawing = true;
             draw(e); 
@@ -42,6 +68,19 @@
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mousemove', draw);
+
+        toggleViewBtn.addEventListener('click', function() {
+            isWhiteboardVisible = !isWhiteboardVisible;
+            if (isWhiteboardVisible) {
+        canvas.style.display = '';
+                authorSection.style.display = 'none';
+                toggleViewBtn.textContent = 'Author Page';
+            } else {
+                canvas.style.display = 'none';
+                authorSection.style.display = '';
+                toggleViewBtn.textContent = 'White therap';
+            }
+        });
     </script>
 </body>
 </html>
