@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard Assistant - Erase</title>
+    <style>
+        #canvas {
+            border: 2px solid #000;
+            margin-bottom: 20px;
+        }
+        
+        .button-area {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="button-area">
+        <button id="eraseMode">Erase Mode</button>
+        <button id="clearCanvas">Clear Canvas</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let erase = false;
+
+        const setupCanvas = () => {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        };
+
+        document.getElementById('eraseMode').addEventListener('click', () => {
+            erase = !erase;
+            if (erase) {
+                canvas.style.cursor = 'crosshair';
+            } else {
+                canvas.style.cursor = 'default';
+            }
+        });
+
+        document.getElementById('clearCanvas').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            setupCanvas();
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (erase) {
+                canvas.addEventListener('mousemove', eraseOnMove);
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (erase) {
+                canvas.removeEventListener('mousemove', eraseOnMove);
+            }
+        });
+
+        function eraseOn() {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            ctx.clearRect(x, y, 10, 10);
+        }
+
+        window.onload = () => {
+            setupPresentTool();
+        };
+
+    </script>
+</body>
+</html>
