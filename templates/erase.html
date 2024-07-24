@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whiteboard Assistant - Erase</title>
+    <title>Whiteboard Assistant - Erase & Draw</title>
     <style>
         #canvas {
             border: 2px solid #000;
@@ -19,6 +19,7 @@
 
     <canvas id="canvas" width="800" height="600"></canvas>
     <div class="button-area">
+        <button id="drawMode">Draw Mode</button>
         <button id="eraseMode">Erase Mode</button>
         <button id="clearCanvas">Clear Canvas</button>
     </div>
@@ -27,16 +28,29 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let erase = false;
+        let draw = false;
+        let isDrawing = false;
 
         const setupCanvas = () => {
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         };
 
+        document.getElementById('drawMode').addEventListener('click', () => {
+            draw = !draw;
+            if (draw) {
+                canvas.style.cursor = 'crosshair';
+                erase = false; // Ensure erase mode is turned off when entering draw mode
+            } else {
+                canvas.style.cursor = 'default';
+            }
+        });
+
         document.getElementById('eraseMode').addEventListener('click', () => {
             erase = !erase;
             if (erase) {
                 canvas.style.cursor = 'crosshair';
+                draw = false; // Ensure draw mode is turned off when entering erase mode
             } else {
                 canvas.style.cursor = 'default';
             }
@@ -48,26 +62,48 @@
         });
 
         canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
             if (erase) {
                 canvas.addEventListener('mousemove', eraseOnMove);
+            } else if (draw) {
+                // Start drawing
+                ctx.beginPath();
+                ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
             }
         });
 
         canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
             if (erase) {
-                canvas.removeEventListener('mousemove', eraseOnMove);
+perms                canvas.removeEventListener('mousemove', eraseOnMove);
+            }
+            if (draw) {
+                // Stop drawing
+                ctx.closePath();
             }
         });
 
-        function eraseOn() {
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing && draw) {
+                drawLine(e);
+            }
+        });
+
+        function eraseOnMove(e) {
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             ctx.clearRect(x, y, 10, 10);
         }
 
+        function drawLine(e) {
+            if (!draw) return;
+            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx.stroke();
+        }
+
         window.onload = () => {
-            setupPresentTool();
+            setupCanvas();
         };
 
     </script>
