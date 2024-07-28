@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WhiteboardAssistant - Manage Notes</title>
+</head>
+<body>
+    <h1>Notes Management</h1>
+    
+    <!-- Form to Add a New Note -->
+    <h2>Add a New Note</h2>
+    <form action="${ENV_ADD_NOTE_ENDPOINT}" method="POST">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50" required></textarea><br>
+        <input type="submit" value="Add Note">
+    </form>
+    
+    <!-- Form to Edit an Existing Note -->
+    <h2>Edit Note</h2>
+    <form action="${ENV_EDIT_NOTE_ENDPOINT}" method="POST">
+        <label for="note_id">Note ID:</label><br>
+        <input type="text" id="note_id" name="note_id" required><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="edit_title" name="title"><br>
+        <label for="content">Content:</label><br>
+        <textarea id="edit_content" name="content" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Update Note">
+    </form>
+    
+    <!-- Form to Delete a Note -->
+    <h2>Delete Note</h2>
+    <form action="${ENV_DELETE_NOTE_ENDPOINT}" method="POST">
+        <label for="del_note_id">Note ID:</label><br>
+        <input type="text" id="del_note_id" name="note_id" required><br>
+        <input type="submit" value="Delete Note">
+    </form>
+
+    <script>
+        console.warn('Replace ENV_* placeholders with actual server endpoints before deployment.');
+    </script>
+</body>
+</html>
