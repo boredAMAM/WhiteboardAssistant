@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: #f4f4f4;
+    padding: 20px;
+    text-align: center;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    color: white;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: block;
+}
+
+.nav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.drawing-page {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.canvas-container {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee;
+}
+
+.tools-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.tool-button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.tool-button:hover {
+    background-color: #ddd;
+}
+
+.notes-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.note {
+    margin: 10px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-left: 5px solid #333;
+}
+
+@media (max-width: 768px) {
+    .drawing-page, .notes-page {
+        flex-direction: column;
+    }
+
+    .canvas-container, .tools-container {
+        flex: none;
+        width: 100%;
+    }
+
+    .nav {
+        flex-direction: column;
+    }
+
+    .nav a {
+        text-align: center;
+        padding: 10px;
+    }
+}
